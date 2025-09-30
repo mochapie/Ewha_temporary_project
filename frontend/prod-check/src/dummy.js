@@ -1,0 +1,20 @@
+export const products = [
+  { id: 1, name: "삼양라면", image: "", 
+    calories: "",  sodium: "", carb: "", sugar: "", fat: "", transFat: "", satFat: "", cholesterol: "", protein: "" },
+  { id: 2, name: "신라면", image: "", 
+    calories: "500kcal",  sodium: "1,790mg", carb: "79g", sugar: "4g", fat: "16g", transFat: "0g", satFat: "8g", cholesterol: "0mg", protein: "10g" },
+  { id: 3, name: "진라면", image: "", 
+    calories: "",  sodium: "", carb: "", sugar: "", fat: "", transFat: "", satFat: "", cholesterol: "", protein: "" },
+  { id: 4, name: "참깨라면", image: "/참깨라면.png", 
+    calories: "",  sodium: "", carb: "", sugar: "", fat: "", transFat: "", satFat: "", cholesterol: "", protein: "" },
+  { id: 5, name: "열라면", image: "", 
+    calories: "",  sodium: "", carb: "", sugar: "", fat: "", transFat: "", satFat: "", cholesterol: "", protein: "" },
+  { id: 6, name: "맛있는 라면", image: "", 
+    calories: "",  sodium: "", carb: "", sugar: "", fat: "", transFat: "", satFat: "", cholesterol: "", protein: "" },
+  { id: 7, name: "매일우유", image: "", 
+    calories: "",  sodium: "", carb: "", sugar: "", fat: "", transFat: "", satFat: "", cholesterol: "", protein: "" },
+  { id: 8, name: "파스퇴르우유", image: "", 
+    calories: "",  sodium: "", carb: "", sugar: "", fat: "", transFat: "", satFat: "", cholesterol: "", protein: "" },
+  { id: 9, name: "서울우유", image: "", 
+    calories: "",  sodium: "", carb: "", sugar: "", fat: "", transFat: "", satFat: "", cholesterol: "", protein: "" }
+];
