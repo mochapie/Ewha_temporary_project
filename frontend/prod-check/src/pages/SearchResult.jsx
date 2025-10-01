@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';   // 추가
-import { MagnifyingGlassIcon, HomeIcon, ScaleIcon, UserIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
+import { MagnifyingGlassIcon, HomeIcon, ScaleIcon, UserIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 export default function SearchResult() {
   const location = useLocation();
   const query = decodeURIComponent(
     new URLSearchParams(location.search).get("q") || ""
   );
+
+  const handleSortChange = (option) => {
+    // 정렬 로직
+  }
 
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -45,18 +49,23 @@ export default function SearchResult() {
         <SearchBox previousQuery={query} />
       </header>
 
-      {/* 검색 결과 */}
-      <main className="p-3 sm:p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 sm:gap-3">
-        {loading && <p className="col-span-full text-center">검색 중...</p>}
-        {error && <p className="col-span-full text-center text-red-500">{error}</p>}
-        {!loading && !error && results.length > 0 ? (
-          results.map((product) => (
-            <div
-              key={product.id}
-              className="p-1 w-full max-w-[250px] mx-auto bg-white shadow hover:scale-105 transition"
-              onClick={() => navigate(`/product/${product.id}`)}
-            >
-              {product.imageUrl ? (
+      <main className="px-3 sm:px-6 py-3">
+        {/* 정렬기준 드롭다운 */}
+        <div className="flex justify-end pr-7 pb-3">
+          <SortDropdown onChange={handleSortChange} />
+        </div>
+        {/* 검색 결과 */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-3">
+          {loading && <p className="col-span-full text-center">검색 중...</p>}
+          {error && <p className="col-span-full text-center text-red-500">{error}</p>}
+          {!loading && !error && results.length > 0 ? (
+            results.map((product) => (
+              <div
+                key={product.id}
+                className="p-1 w-full max-w-[250px] mx-auto bg-white shadow hover:scale-105 transition"
+                onClick={() => navigate(`/product/${product.id}`)}
+              >
+                {/* 이미지 */}
                 <div className="w-full h-[150px] lg:h-[200px] mb-3">
                   <img
                     src={product.imageUrl}
@@ -64,17 +73,16 @@ export default function SearchResult() {
                     className="w-full h-full object-cover border-[#EAEAEA] rounded"
                   />
                 </div>
-              ) : (
-                <div className="w-full h-[150px] lg:h-[200px] mb-3 bg-gray-300 flex items-center justify-center"></div>
-              )}
-              <div className="h-12 flex items-start">
-                <span className="text-base font-medium line-clamp-2">{product.name}</span>
+                {/* 상품명 */}
+                <div className="h-12 flex items-start">
+                  <span className="text-base font-medium line-clamp-2">{product.name}</span>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          !loading && <p className="col-span-full text-center text-gray-700">검색 결과가 없습니다.</p>
-        )}
+            ))
+          ) : (
+            !loading && <p className="col-span-full text-center text-gray-700">검색 결과가 없습니다.</p>
+          )}
+        </div>
       </main>
 
       {/* 하단 내비게이션 */}
@@ -123,4 +131,76 @@ function SearchBox({ previousQuery }) {
       </div>
     </form>
   );
+}
+
+// 추가
+function SortDropdown({ onChange }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isSubOpen, setIsSubOpen] = useState(false);
+    const [selected, setSelected] = useState("추천순");
+
+    const handleSelect = (option) => {
+        setSelected(option);
+        setIsOpen(false);
+        setIsSubOpen(false);
+        if (onChange) onChange(option);
+    }
+
+    return (
+        <div className="relative">
+            <button className="flex items-center justify-between w-full text-sm font-medium p-1.5"
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                {isOpen ? <ChevronUpIcon className="w-3 h-3" /> : <ChevronDownIcon className="w-3 h-3" />} {selected}
+            </button>
+
+            {/* 1차 드롭다운 */}
+            {isOpen && (
+                <div className="absolute right-0 w-36 bg-white border border-[#EAEAEA] z-50">
+                    <button className="flex items-center w-full text-left text-sm font-medium p-1.5"
+                        onClick={() => handleSelect("추천순")}
+                    >
+                        추천순
+                    </button>
+
+                    <button className="flex items-center justify-between w-full text-left font-medium text-sm p-1.5"
+                        onClick={() => setIsSubOpen(!isSubOpen)}
+                    > 
+                        영양성분함량순 {isSubOpen ? <ChevronUpIcon className="w-3 h-3" /> : <ChevronDownIcon className="w-3 h-3" />}
+                    </button>
+
+                    {/* 2차 드롭다운 */}
+                    {isSubOpen && (
+                        <div className="w-full bg-[#EAEAEA]">
+                            <button className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                                onClick={() => handleSelect("칼로리순")}
+                            >
+                                칼로리
+                            </button>
+                            <button className="flex items-center text-left text-sm font-medium p-1.5 pl-3"
+                                onClick={() => handleSelect("나트륨순")}
+                            >
+                                나트륨
+                            </button>
+                            <button className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                                onClick={() => handleSelect("당류순")}
+                            >
+                                당류
+                            </button>
+                            <button className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                                onClick={() => handleSelect("지방순")}
+                            >
+                                지방
+                            </button>
+                            <button className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                                onClick={() => handleSelect("단백질순")}
+                            >
+                                단백질
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    )
 }
