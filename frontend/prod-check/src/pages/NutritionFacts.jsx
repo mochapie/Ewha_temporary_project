@@ -80,9 +80,9 @@ export default function NutritionFacts() {
             : `✅ ${userAllergiesArray.join(", ")} 함유되어 있지 않음`;
     
         // 간접 알레르기
-            const potentialAllergyNote = matchedPotentialAllergies.length > 0
-            ? `⚠️ ${matchedAllergies.join(", ")} 혼입 가능성 있음`
-            : null;
+        const potentialAllergyNote = matchedPotentialAllergies.length > 0
+        ? `⚠️ ${matchedAllergies.join(", ")} 혼입 가능성 있음`
+        : null;
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
