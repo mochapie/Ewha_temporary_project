@@ -23,15 +23,15 @@ export default function NutritionFacts() {
     }
 
     const items = [
-        { label: "열량", value: product.calories },
-        { label: "나트륨", value: product.sodium },
-        { label: "탄수화물", value: product.carbohydrate },
-        { label: "당류", value: product.sugar },
-        { label: "지방", value: product.fat },
-        { label: "트랜스지방", value: product.transFat },
-        { label: "포화지방", value: product.saturatedFat },
-        { label: "콜레스테롤", value: product.cholesterol },
-        { label: "단백질", value: product.protein }
+        { label: "열량", value: product.calories, unit: "kcal" },
+        { label: "나트륨", value: product.sodium, unit: "mg" },
+        { label: "탄수화물", value: product.carbohydrate, unit: "g" },
+        { label: "당류", value: product.sugar, unit: "g" },
+        { label: "지방", value: product.fat, unit: "g" },
+        { label: "트랜스지방", value: product.transFat, unit: "g" },
+        { label: "포화지방", value: product.saturatedFat, unit: "g" },
+        { label: "콜레스테롤", value: product.cholesterol, unit: "mg" },
+        { label: "단백질", value: product.protein, unit: "g" }
     ];
 
     // 여기서부터가 추가된 부분
@@ -87,37 +87,40 @@ export default function NutritionFacts() {
     return (
         <div className="flex flex-col min-h-screen bg-white">
             {/* 상단 내비게이션 */}
-            <header className="flex items-center justify-between p-3 shadow">
+            <header className="fixed top-0 left-0 bg-white w-full flex items-center justify-between p-3 shadow">
                 <button
                     onClick={() => navigate(-1)}
                     className="hover:scale-105 transition"
                 >
-                    <ArrowLeftIcon className="w-6 h-6" />
+                    <ArrowLeftIcon className="w-7 h-7" />
                 </button>
                 <Link to="/" className="hover:scale-105 transition">
-                    <HomeIcon className="w-6 h-6" />
+                    <HomeIcon className="w-7 h-7" />
                 </Link>
             </header>
 
-            <main className="grid grid-cols-1 md:grid-cols-2">
-                {/* 상품명 + 이미지 */}
-                <div className="relative w-full max-w-md mx-auto md:mt-6">
+            <main className="grid grid-cols-1 md:grid-cols-2 pt-[52px] pb-[70px]">
+                {/* 이미지 */}
+                <div className="w-full max-w-md mx-auto md:mt-[100px]">
                     <img
                         src={product.imageUrl}
                         alt={`${product.name} 이미지`}
                         className="w-full h-[360px] md:h-full object-cover"
                     />
-                    <div className="absolute bottom-3 left-0 w-full text-lg font-medium p-3">
-                        {product.name}
-                    </div>
                 </div>
 
-                {/* 영양정보 */}
-                <div>
-                    <div className="font-medium px-6 py-3 mb-2 border-b border-[#EAEAEA]">영양 정보</div>
-                    <div className="px-6 py-3 space-y-2">
+                {/* 상품명 + 영양정보 */}
+                <div className="md:mt-[50px]">
+                    <div className="w-full text-lg font-medium p-3">
+                        {product.name}
+                    </div>
+                    <div className="w-full h-2.5 bg-[#EAEAEA]"></div>
+                    <div className="w-full font-medium px-6 py-3 mb-2 border-b border-[#EAEAEA]">
+                        영양 정보
+                    </div>
+                    <div className="w-full font-light px-6 py-3 space-y-2">
                         {items.map((item) => (
-                            <div key={item.label} className="flex justify-between text-sm md:text-base font-light">
+                            <div key={item.label} className="flex justify-between text-sm md:text-base">
                                 <span>{item.label}</span>
                                 <span>{item.value}</span>
                             </div>
@@ -129,7 +132,7 @@ export default function NutritionFacts() {
             {/* 적합성 버튼 */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-0 left-0 w-full py-5 h-16 font-semibold text-white bg-[#003853]"
+                className="fixed bottom-0 left-0 w-full py-5 h-[63px] font-semibold md:text-lg text-white bg-[#003853]"
             >
                 상품 적합성 판단하기
             </button>
@@ -186,7 +189,7 @@ export default function NutritionFacts() {
                                             />
                                         </div>
                                         <div className="h-12 flex items-start">
-                                            <span className="text-base font-medium line-clamp-2">{product.name}</span>
+                                            <span className="font-normal line-clamp-2">{product.name}</span>
                                         </div>
                                     </div>
                                 ))}
