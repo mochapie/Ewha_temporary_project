@@ -5,36 +5,24 @@ import project.final_project.entity.Product;
 import project.final_project.entity.UserPreference;
 import project.final_project.repository.ProductRepository;
 import org.springframework.web.bind.annotation.*;
+import project.final_project.service.SuitabilityService;
 
-@RestController   // ✅ 컨트롤러니까 @RestController
+@RestController
 @RequestMapping("/api/suitability")
+@CrossOrigin(origins = "http://localhost:5173")
 public class SuitabilityController {
 
-    private final ProductRepository productRepository;
+    private final SuitabilityService suitabilityService;
 
-    public SuitabilityController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public SuitabilityController(SuitabilityService suitabilityService) {
+        this.suitabilityService = suitabilityService;
     }
 
-    @PostMapping("/check")
-    public SuitabilityResponseDto checkSuitability(@RequestBody Product product,
-                                                   @RequestBody UserPreference preference) {
-        String avoid = preference.getAvoidIngredient();
-
-        // description 대신 allergy + name 으로 검사
-        boolean unsuitable = (product.getAllergy() != null && product.getAllergy().contains(avoid)) ||
-                (product.getName() != null && product.getName().contains(avoid));
-
-        String message;
-        boolean suitable;
-        if (unsuitable) {
-            message = "⚠️ " + avoid + " 성분이 포함되어 있어요.";
-            suitable = false;
-        } else {
-            message = "✅ " + avoid + " 성분이 포함되어 있지 않아요.";
-            suitable = true;
-        }
-
-        return new SuitabilityResponseDto(suitable, message, java.util.List.of(product));
+    // 적합성 판단 API
+    @GetMapping("/{productId}")
+    public SuitabilityResponseDto checkProduct(
+            @PathVariable Long productId,
+            @RequestParam String username) {
+        return suitabilityService.checkSuitability(productId, username);
     }
 }

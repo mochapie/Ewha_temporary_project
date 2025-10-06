@@ -17,10 +17,14 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // 검색 API
+    // 검색 + 정렬 API
     @GetMapping("/search")
-    public List<Product> getProductDetail(@RequestParam(name = "keyword") String keyword) {
-        return productService.searchProducts(keyword);
+    public List<Product> searchProducts(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(name = "order", defaultValue = "asc") String order
+    ) {
+        return productService.searchProducts(keyword, sortBy, order);
     }
 
     // 상세 조회 API
