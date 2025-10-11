@@ -40,27 +40,30 @@ export default function Home() {
             {/* 하단 내비게이션 */}
             <div className="fixed bottom-0 left-0 w-full flex items-center h-[63px] bg-[#003853]">
                 <Link to="/" 
-                    className="flex-1 flex flex-col items-center justify-center 
+                    className="flex-1 flex flex-col 
+                    items-center justify-center 
                     text-xs font-medium text-[#A0B9C9] 
                     hover:scale-105 transition"
                 >
-                    <HomeIcon className="w-7 h-7 mb-1 text-[#A0B9C9]"/>
+                    <HomeIcon className="w-7 h-7 mb-1"/>
                     홈
                 </Link>
                 <div 
-                    className="flex-1 flex flex-col items-center justify-center 
+                    className="flex-1 flex flex-col 
+                    items-center justify-center 
                     text-xs font-medium text-[#A0B9C9] 
                     hover:scale-105 transition"
                 >
-                    <ScaleIcon className="w-7 h-7 mb-1 text-[#A0B9C9]"/>
+                    <ScaleIcon className="w-7 h-7 mb-1"/>
                     상품 비교
                 </div>
                 <div 
-                    className="flex-1 flex flex-col items-center justify-center 
+                    className="flex-1 flex flex-col 
+                    items-center justify-center 
                     text-xs font-medium text-[#A0B9C9] 
                     hover:scale-105 transition"
                 >
-                    <UserIcon className="w-7 h-7 mb-1 text-[#A0B9C9]"/>
+                    <UserIcon className="w-7 h-7 mb-1"/>
                     마이페이지
                 </div>
             </div>

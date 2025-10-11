@@ -5,7 +5,9 @@ import { MagnifyingGlassIcon, HomeIcon, ScaleIcon, UserIcon, ChevronUpIcon, Chev
 
 export default function SearchResult() {
   const location = useLocation();
-  const query = decodeURIComponent(new URLSearchParams(location.search).get("q") || "");
+  const query = decodeURIComponent(
+    new URLSearchParams(location.search).get("q") || ""
+  );
   const navigate = useNavigate();
 
   // 🔹 정렬 상태 추가
@@ -57,16 +59,18 @@ export default function SearchResult() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      {/* 검색창 */}
       <header className="flex items-center p-3 shadow">
         <img src="/logo.svg" className="w-12" alt="로고" />
         <SearchBox previousQuery={query} />
       </header>
 
       <main className="px-3 sm:px-6 py-3 pb-[70px]">
+        {/* 정렬기준 드롭다운 */}
         <div className="flex justify-end pr-7 pb-3">
           <SortDropdown onChange={handleSortChange} />
         </div>
-
+        {/* 검색 결과 */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-3">
           {loading && <p className="col-span-full text-center">검색 중...</p>}
           {error && <p className="col-span-full text-center text-red-500">{error}</p>}
@@ -77,6 +81,7 @@ export default function SearchResult() {
                 className="p-1 w-full max-w-[250px] mx-auto bg-white shadow hover:scale-105 transition"
                 onClick={() => navigate(`/product/${product.id}`)}
               >
+                {/* 이미지 */}
                 <div className="w-full h-[150px] lg:h-[200px] mb-3">
                   <img
                     src={product.imageUrl}
@@ -84,6 +89,7 @@ export default function SearchResult() {
                     className="w-full h-full object-cover border-[#EAEAEA] rounded"
                   />
                 </div>
+                {/* 상품명 */}
                 <div className="h-12 flex items-start">
                   <span className="text-base font-medium line-clamp-2">{product.name}</span>
                 </div>
@@ -95,17 +101,33 @@ export default function SearchResult() {
         </div>
       </main>
 
+      {/* 하단 내비게이션 */}
       <div className="fixed bottom-0 left-0 w-full flex h-[63px] bg-[#003853]">
-        <Link to="/" className="flex-1 flex flex-col items-center justify-center text-xs font-medium text-[#A0B9C9] hover:scale-105 transition">
-          <HomeIcon className="w-7 h-7 mb-1 text-[#A0B9C9]" />
+        <Link to="/" 
+          className="flex-1 flex flex-col 
+          items-center justify-center 
+          text-xs font-medium text-[#A0B9C9] 
+          hover:scale-105 transition"
+        >
+          <HomeIcon className="w-7 h-7 mb-1" />
           홈
         </Link>
-        <div className="flex-1 flex flex-col items-center justify-center text-xs font-medium text-[#A0B9C9] hover:scale-105 transition">
-          <ScaleIcon className="w-7 h-7 mb-1 text-[#A0B9C9]" />
+        <div 
+          className="flex-1 flex flex-col 
+          items-center justify-center 
+          text-xs font-medium text-[#A0B9C9] 
+          hover:scale-105 transition"
+        >
+          <ScaleIcon className="w-7 h-7 mb-1" />
           상품 비교
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center text-xs font-medium text-[#A0B9C9] hover:scale-105 transition">
-          <UserIcon className="w-7 h-7 mb-1 text-[#A0B9C9]" />
+        <div 
+          className="flex-1 flex flex-col 
+          items-center justify-center 
+          text-xs font-medium text-[#A0B9C9] 
+          hover:scale-105 transition"
+        >
+          <UserIcon className="w-7 h-7 mb-1" />
           마이페이지
         </div>
       </div>
@@ -113,7 +135,7 @@ export default function SearchResult() {
   );
 }
 
-// ✅ 검색창 컴포넌트 그대로 유지
+// 검색창 컴포넌트
 function SearchBox({ previousQuery }) {
   const [query, setQuery] = useState(previousQuery || "");
   const navigate = useNavigate();
@@ -143,7 +165,7 @@ function SearchBox({ previousQuery }) {
   );
 }
 
-// ✅ 정렬 드롭다운 그대로 사용 가능
+// 정렬기준 드롭다운 컴포넌트
 function SortDropdown({ onChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubOpen, setIsSubOpen] = useState(false);
@@ -167,29 +189,50 @@ function SortDropdown({ onChange }) {
 
       {isOpen && (
         <div className="absolute right-0 w-36 bg-white border border-[#EAEAEA] z-50">
-          <button className="flex items-center w-full text-left text-sm font-medium p-1.5" onClick={() => handleSelect("추천순")}>
+          <button 
+            className="flex items-center w-full text-left text-sm font-medium p-1.5" 
+            onClick={() => handleSelect("추천순")}
+          >
             추천순
           </button>
 
-          <button className="flex items-center justify-between w-full text-left font-medium text-sm p-1.5" onClick={() => setIsSubOpen(!isSubOpen)}>
+          <button 
+            className="flex items-center justify-between w-full text-left font-medium text-sm p-1.5" 
+            onClick={() => setIsSubOpen(!isSubOpen)}
+          >
             영양성분함량순 {isSubOpen ? <ChevronUpIcon className="w-3 h-3" /> : <ChevronDownIcon className="w-3 h-3" />}
           </button>
 
           {isSubOpen && (
             <div className="w-full bg-[#EAEAEA]">
-              <button onClick={() => handleSelect("칼로리순")} className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3">
+              <button
+                className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                onClick={() => handleSelect("칼로리순")}
+              >
                 칼로리
               </button>
-              <button onClick={() => handleSelect("나트륨순")} className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3">
+              <button
+                className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                onClick={() => handleSelect("나트륨순")}
+              >
                 나트륨
               </button>
-              <button onClick={() => handleSelect("당류순")} className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3">
+              <button
+                className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                onClick={() => handleSelect("당류순")}
+              >
                 당류
               </button>
-              <button onClick={() => handleSelect("지방순")} className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3">
+              <button
+                className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                onClick={() => handleSelect("지방순")}
+              >
                 지방
               </button>
-              <button onClick={() => handleSelect("단백질순")} className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3">
+              <button
+                className="flex items-center w-full text-left text-sm font-medium p-1.5 pl-3"
+                onClick={() => handleSelect("단백질순")}
+              >
                 단백질
               </button>
             </div>
