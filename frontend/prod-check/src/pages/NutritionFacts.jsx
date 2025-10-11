@@ -18,7 +18,7 @@ export default function NutritionFacts() {
     allergies: "밀,땅콩,카페인",
   };
 
-  // ✅ 상품 정보 불러오기
+  // 상품 정보 불러오기
   useEffect(() => {
     axios
       .get(`http://localhost:8080/api/products/${id}`)
@@ -45,7 +45,7 @@ export default function NutritionFacts() {
     ]);
   }, [id]);
 
-  // ✅ 모달 열릴 때 스크롤 잠금
+  // 모달 열릴 때 스크롤 잠금
   useEffect(() => {
     if (isOpen) {
       const scrollY = window.scrollY;
@@ -65,7 +65,7 @@ export default function NutritionFacts() {
     return <p className="text-center mt-10">로딩 중...</p>;
   }
 
-  // ✅ 영양 정보 리스트
+  // 영양 정보 리스트
   const items = [
     { label: "열량", value: product.calories, unit: "kcal" },
     { label: "나트륨", value: product.sodium, unit: "mg" },
@@ -102,13 +102,13 @@ export default function NutritionFacts() {
 
     allergyNote =
       matchedAllergies.length > 0
-        ? `❌ ${matchedAllergies.join(", ")} 성분이 함유되어 있습니다.`
-        : `✅ ${userAllergiesArray.join(", ")} 성분이 함유되어 있지 않습니다.`;
+        ? `❌ ${matchedAllergies.join(", ")} 성분이 함유되어 있어요.`
+        : `✅ ${userAllergiesArray.join(", ")} 성분이 함유되어 있지 않아요.`;
 
     potentialAllergyNote =
       matchedPotentialAllergies.length > 0
-        ? `⚠️ ${matchedPotentialAllergies.join(", ")} 성분이 간접적으로 포함될 수 있습니다.`
-        : `✅ ${userAllergiesArray.join(", ")} 성분이 간접적으로 함유되어 있지 않습니다.`;
+        ? `⚠️ ${matchedPotentialAllergies.join(", ")} 성분이 미량 존재할 수 있어요.`
+        : null;
   } catch (error) {
     console.error("알레르기 처리 중 오류:", error);
   }
@@ -117,10 +117,16 @@ export default function NutritionFacts() {
     <div className="flex flex-col min-h-screen bg-white">
       {/* 상단 내비게이션 */}
       <header className="fixed top-0 left-0 bg-white w-full flex items-center justify-between p-3 shadow">
-        <button onClick={() => navigate(-1)} className="hover:scale-105 transition">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="hover:scale-105 transition"
+        >
           <ArrowLeftIcon className="w-7 h-7" />
         </button>
-        <Link to="/" className="hover:scale-105 transition">
+        <Link 
+          to="/" 
+          className="hover:scale-105 transition"
+        >
           <HomeIcon className="w-7 h-7" />
         </Link>
       </header>
@@ -137,7 +143,9 @@ export default function NutritionFacts() {
 
         {/* 상품명 + 영양정보 */}
         <div className="md:mt-[50px]">
-          <div className="w-full text-lg font-medium p-3">{product.name}</div>
+          <div className="w-full text-lg font-medium p-3">
+            {product.name}
+          </div>
           <div className="w-full h-2.5 bg-[#EAEAEA]"></div>
           <div className="w-full font-medium px-6 py-3 mb-2 border-b border-[#EAEAEA]">
             영양 정보
@@ -161,7 +169,7 @@ export default function NutritionFacts() {
         상품 적합성 판단하기
       </button>
 
-      {/* ✅ 적합성 모달 + 추천 상품 */}
+      {/* 적합성 버튼 눌렀을 때 */}
       {isOpen && (
         <div className="fixed inset-0 flex items-end md:items-center justify-center bg-black bg-opacity-50 z-50">
           <div
@@ -173,11 +181,13 @@ export default function NutritionFacts() {
               animate-slide-up md:animate-fade-in
             "
           >
+            {/* 닫기 버튼 */}
             <button onClick={() => setIsOpen(false)} className="absolute top-3 right-3">
               <XCircleIcon className="w-9 h-9 text-[#EAEAEA]" />
             </button>
 
             <div className="mt-10 overflow-y-auto flex-1">
+              {/* 판단 결과 */}
               <div className="bg-[#EAEAEA] rounded-xl p-3 text-center">
                 <p className="text-lg font-medium">
                   이 상품은 {user.name} 님께{" "}
@@ -187,13 +197,12 @@ export default function NutritionFacts() {
                   해요!
                 </p>
               </div>
-
               <div className="mt-3 space-y-1">
                 <p className="font-medium">{allergyNote}</p>
                 <p className="font-medium">{potentialAllergyNote}</p>
               </div>
 
-              {/* ✅ 추천 상품 섹션 */}
+              {/* 추천 상품 섹션 */}
               <div className="mt-10 p-3 border-t border-[#CCCCCC]">
                 <p className="font-light">이런 상품도 추천해요 😆</p>
               </div>
