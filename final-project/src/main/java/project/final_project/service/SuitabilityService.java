@@ -30,18 +30,21 @@ public class SuitabilityService {
         UserPreference preference = preferenceRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
 
-        boolean suitable = true;
         List<String> reasons = new ArrayList<>();
         List<String> safeReasons = new ArrayList<>();
 
-        // 알레르기 체크
+        boolean hasDirectAllergy = false;
+        boolean hasIndirectAllergy = false;
+
+        // 직접 알레르기 체크
         if (preference.getAllergy() != null) {
             for (String allergy : preference.getAllergy().split(",")) {
-                if (product.getAllergy() != null && product.getAllergy().contains(allergy.trim())) {
-                    suitable = false;
-                    reasons.add("⚠️ " + allergy + " 성분이 함유되어 있습니다.");
+                String trimmed = allergy.trim();
+                if (product.getAllergy() != null && product.getAllergy().contains(trimmed)) {
+                    hasDirectAllergy = true;
+                    reasons.add("⚠️ " + trimmed + " 성분이 함유되어 있습니다.");
                 } else {
-                    safeReasons.add("☑️ " + allergy + " 성분이 함유되어 있지 않습니다.");
+                    safeReasons.add("☑️ " + trimmed + " 성분이 함유되어 있지 않습니다.");
                 }
             }
         }
@@ -49,15 +52,27 @@ public class SuitabilityService {
         // 간접 알레르기 체크
         if (preference.getIndirectAllergy() != null) {
             for (String indirect : preference.getIndirectAllergy().split(",")) {
-                if (product.getIndirectAllergy() != null && product.getIndirectAllergy().contains(indirect.trim())) {
-                    suitable = false;
-                    reasons.add("⚠️ " + indirect + " 성분이 함유되어 있습니다.");
+                String trimmed = indirect.trim();
+                if (product.getIndirectAllergy() != null && product.getIndirectAllergy().contains(trimmed)) {
+                    hasIndirectAllergy = true;
+                    reasons.add("⚠️ " + trimmed + " 성분이 미량 포함될 수 있습니다.");
                 } else {
-                    safeReasons.add("☑️ " + indirect + " 성분이 함유되어 있지 않습니다.");
+                    safeReasons.add("☑️ " + trimmed + " 성분이 미량 포함되지 않습니다.");
                 }
             }
         }
 
-        return new SuitabilityResponseDto(suitable, reasons, safeReasons);
+        // ✅ 적합성 단계 판정
+        String status;
+        if (hasDirectAllergy) {
+            status = "unsuitable"; // 부적합
+        } else if (hasIndirectAllergy) {
+            status = "caution"; // 주의 필요
+        } else {
+            status = "suitable"; // 적합
+        }
+
+        return new SuitabilityResponseDto(status, reasons, safeReasons);
     }
+
 }
