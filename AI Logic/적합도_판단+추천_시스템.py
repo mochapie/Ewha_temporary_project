@@ -186,10 +186,18 @@ def analyze(body: RequestBody):
     except Exception:
         reason = "(AI 설명 생성 실패)"
 
+summary_results = [{"성분": n["성분"], "평가": n["평가"]} for n in nutrition_results]
+
+return {
+    "간접알레르기": warning_text,
+    "AI설명": reason,
+    "성분분석": summary_results
+}
+
 
     
 # ---------------------------------------------------------
-# 🔹 여기서부터 추천 시스템 (XGBoost만)
+## 여기서부터 추천 시스템 (XGBoost만, 추후 고려) ##
 # ---------------------------------------------------------
 
     
@@ -223,13 +231,3 @@ def analyze(body: RequestBody):
     sim = cosine_similarity([base_vec.values], pool_per100.values)[0]
     pool_df = pool_df.assign(similarity=sim).sort_values("similarity", ascending=False)
     top6 = pool_df.head(6)["품명"].tolist()
-
-    # ✅ 응답 반환
-    return {
-        "제품명": product_name,
-        "최종판정": final,
-        "AI설명": reason,
-        "경고": warning_text,
-        "성분분석": nutrition_results,
-        "추천제품": top6
-    }
