@@ -14,7 +14,7 @@ export default function NutritionFacts() {
   // ✅ 테스트용 user (로그인 연동 전)
   const user = {
     name: "홍길동",
-    allergies: "밀, 땅콩,카페인",
+    allergies: "밀, 땅콩, 카페인",
   };
 
   // ✅ 상품 정보 불러오기
@@ -26,9 +26,9 @@ export default function NutritionFacts() {
 
     // ✅ 추천 상품 더미 (AI 연동 전)
     setRecommendedProducts([
-      { id: 101, name: "진짬뽕 컵라면 115g", image: "/images/jjambbong.png" },
-      { id: 102, name: "열라면 큰사발 110g", image: "/images/yeolramyun.png" },
-      { id: 103, name: "비빔면 130g", image: "/images/bibimmyun.png" },
+      { id: 101, name: "큼컵 불닭볶음면", image: "https://sitem.ssgcdn.com/59/99/83/item/0000008839959_i1_1200.jpg" },
+      { id: 102, name: "큰컵 탱글 머쉬룸크림파스타", image: "https://sitem.ssgcdn.com/16/91/48/item/1000697489116_i1_1200.jpg" },
+      { id: 103, name: "뽀로로짜장", image: "https://sitem.ssgcdn.com/73/21/55/item/1000683552173_i1_1200.jpg" },
     ]);
   }, [id]);
 
@@ -70,6 +70,7 @@ export default function NutritionFacts() {
   let potentialAllergyNote = "";
   let matchedAllergies = [];
   let matchedPotentialAllergies = [];
+  let explanation = "설명이 잘 나오나..."; // 설명 변수
 
   try {
     const userAllergiesArray = user.allergies?.split(",").map((a) => a.trim()) || [];
@@ -119,7 +120,7 @@ export default function NutritionFacts() {
 
       {/* 본문 */}
       <main className="grid grid-cols-1 md:grid-cols-2 pt-[52px] pb-[70px]">
-        <div className="w-full max-w-md mx-auto md:mt-[100px]">
+        <div className="w-full max-w-md mx-auto md:mt-[75px]">
           <img
             src={product.imageUrl}
             alt={`${product.name} 이미지`}
@@ -172,6 +173,9 @@ export default function NutritionFacts() {
               <div className="mt-3 space-y-1">
                 <p className="font-medium">{allergyNote}</p>
                 {potentialAllergyNote && <p className="font-medium">{potentialAllergyNote}</p>}
+              </div>
+              <div className="mt-3">
+                <p>{explanation}</p>
               </div>
 
               {/* 추천 상품 */}
