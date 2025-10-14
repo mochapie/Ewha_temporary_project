@@ -186,18 +186,19 @@ def analyze(body: RequestBody):
     except Exception:
         reason = "(AI 설명 생성 실패)"
 
-summary_results = [{"성분": n["성분"], "평가": n["평가"]} for n in nutrition_results]
+    # ✅ 결과 요약 및 반환
+    summary_results = [{"성분": n["성분"], "평가": n["평가"]} for n in nutrition_results]
 
-return {
-    "간접알레르기": warning_text,
-    "AI설명": reason,
-    "성분분석": summary_results
-}
+    return {
+        "간접알레르기": warning_text,
+        "AI설명": reason,
+        "성분분석": summary_results
+    }
 
 
     
 # ---------------------------------------------------------
-## 여기서부터 추천 시스템 (XGBoost만, 추후 고려) ##
+##여기서부터 추천 시스템 (XGBoost만, 추후 고려)##
 # ---------------------------------------------------------
 
     
