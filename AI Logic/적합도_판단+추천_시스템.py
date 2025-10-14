@@ -195,39 +195,3 @@ def analyze(body: RequestBody):
     }
 
 
-    
-# ---------------------------------------------------------
-##여기서부터 추천 시스템 (XGBoost만, 추후 고려)##
-# ---------------------------------------------------------
-
-    
-    # ✅ 9. 유사도 기반 추천
-    def has_allergy(row, allergy_list):
-        text = str(row.get("알레르기", "")).lower()
-        return any(a.lower() in text for a in allergy_list)
-
-    pool_df = df[~df.apply(lambda r: has_allergy(r, user_allergies), axis=1)].copy()
-    pool_df = pool_df[pool_df["품명"] != product_name].copy()
-
-    raw_cols = ["열량","칼로리","나트륨","당류","탄수화물","지방","단백질",
-                "콜레스테롤","포화지방","트랜스지방","칼슘","카페인"]
-    nutr_cols = [c for c in raw_cols if c in df.columns]
-
-    def to_per100_frame(x):
-        out = {}
-        total = float(x.get("개별내용량", 100)) or 100
-        for c in nutr_cols:
-            try:
-                out[c] = float(x.get(c, np.nan)) / total * 100
-            except:
-                out[c] = np.nan
-        return pd.Series(out)
-
-    base_vec = to_per100_frame(row)
-    pool_per100 = pool_df.apply(to_per100_frame, axis=1)
-    fill_vals = pool_per100.median()
-    pool_per100 = pool_per100.fillna(fill_vals)
-    base_vec = base_vec.fillna(fill_vals)
-    sim = cosine_similarity([base_vec.values], pool_per100.values)[0]
-    pool_df = pool_df.assign(similarity=sim).sort_values("similarity", ascending=False)
-    top6 = pool_df.head(6)["품명"].tolist()
