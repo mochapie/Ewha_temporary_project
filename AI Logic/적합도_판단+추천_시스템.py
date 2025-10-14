@@ -190,7 +190,6 @@ def analyze(body: RequestBody):
     summary_results = [{"성분": n["성분"], "평가": n["평가"]} for n in nutrition_results]
 
     return {
-        "간접알레르기": warning_text,
         "AI설명": reason,
         "성분분석": summary_results
     }
