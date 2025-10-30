@@ -16,14 +16,14 @@ from openai import OpenAI
 # ---------------------------------------------------------
 # 🔹 OpenAI API Key 설정
 # ---------------------------------------------------------
-client = OpenAI(api_key="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")  # 🔐 본인 키 입력
+client = OpenAI(api_key="OPENAI_API_KEY")  # 🔐 본인 키 입력
 
 # ---------------------------------------------------------
 # 🔹 RDS 연결 설정
 # ---------------------------------------------------------
-RDS_HOST = "ewha-baekkot-ending.c5cq20gw2kei.ap-northeast-2.rds.amazonaws.com"
-RDS_USER = "popo"
-RDS_PW = "EWHA_ending25"
+RDS_HOST = "RDS_HOST"
+RDS_USER = "RDS_USER"
+RDS_PW = "RDS_PASSWORD"
 
 # ---------------------------------------------------------
 # 🔹 사용자 및 상품 설정
