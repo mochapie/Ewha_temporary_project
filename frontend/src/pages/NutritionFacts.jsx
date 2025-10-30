@@ -16,7 +16,7 @@ export default function NutritionFacts() {
   const user = {
     id: "1",
     name: "홍길동",
-    allergies: "토마토, 카페인",
+    allergies: "토마토, 카페인"
   };
 
   // ✅ 상품 정보 불러오기
@@ -208,6 +208,9 @@ export default function NutritionFacts() {
               <div className="mt-3 space-y-1">
                 <p className="font-medium">{allergyNote}</p>
                 {potentialAllergyNote && <p className="font-medium">{potentialAllergyNote}</p>}
+              </div>
+              <div className="mt-3">
+                <p>{explanation}</p>
               </div>
 
               {/* ✅ AI 설명 표시 영역 */}
