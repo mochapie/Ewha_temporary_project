@@ -10,11 +10,13 @@ export default function NutritionFacts() {
   const [product, setProduct] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const [explanation, setExplanation] = useState("AI 설명을 불러오는 중..."); // ✅ AI 설명 상태 추가
 
   // ✅ 테스트용 user (로그인 연동 전)
   const user = {
+    id: "1",
     name: "홍길동",
-    allergies: "밀, 땅콩, 카페인",
+    allergies: "토마토, 카페인"
   };
 
   // ✅ 상품 정보 불러오기
@@ -26,7 +28,7 @@ export default function NutritionFacts() {
 
     // ✅ 추천 상품 더미 (AI 연동 전)
     setRecommendedProducts([
-      { id: 101, name: "큼컵 불닭볶음면", image: "https://sitem.ssgcdn.com/59/99/83/item/0000008839959_i1_1200.jpg" },
+      { id: 101, name: "큰컵 불닭볶음면", image: "https://sitem.ssgcdn.com/59/99/83/item/0000008839959_i1_1200.jpg" },
       { id: 102, name: "큰컵 탱글 머쉬룸크림파스타", image: "https://sitem.ssgcdn.com/16/91/48/item/1000697489116_i1_1200.jpg" },
       { id: 103, name: "뽀로로짜장", image: "https://sitem.ssgcdn.com/73/21/55/item/1000683552173_i1_1200.jpg" },
     ]);
@@ -47,6 +49,36 @@ export default function NutritionFacts() {
       window.scrollTo(0, parseInt(scrollY || '0') * -1);
     }
   }, [isOpen]);
+
+ // ✅ AI 설명 요청 함수
+  const fetchAIExplanation = async () => {
+    if (!product) return;
+    try {
+      const res = await axios.post(
+        "http://localhost:8080/api/ai/analyze",
+        null,
+        {
+          params: {
+            userId: user.id,
+            productName: product.name,
+          },
+        }
+      );
+
+      console.log("AI 응답:", res.data);
+
+      // ✅ 백엔드의 새 JSON 구조에 맞게 수정
+      const aiText =
+        res.data.ai_description || // 백엔드에서 내려주는 키 (snake_case)
+        res.data.aiDescription ||  // 혹시 camelCase로 들어오는 경우 대비
+        "AI 설명을 불러올 수 없습니다.";
+
+      setExplanation(aiText);
+    } catch (err) {
+      console.error("AI 요청 실패:", err);
+      setExplanation("AI 설명을 불러올 수 없습니다.");
+    }
+  };
 
   if (!product) {
     return <p className="text-center mt-10">로딩 중...</p>;
@@ -70,7 +102,6 @@ export default function NutritionFacts() {
   let potentialAllergyNote = "";
   let matchedAllergies = [];
   let matchedPotentialAllergies = [];
-  let explanation = "설명이 잘 나오나..."; // 설명 변수
 
   try {
     const userAllergiesArray = user.allergies?.split(",").map((a) => a.trim()) || [];
@@ -95,7 +126,7 @@ export default function NutritionFacts() {
     console.error("알레르기 처리 중 오류:", error);
   }
 
-  // ✅ 적합성 판정 (자동 결정)
+  // ✅ 적합성 판정
   const suitability = {
     suitable: { text: "적합", color: "text-green-600" },
     unsuitable: { text: "부적합", color: "text-red-600" },
@@ -136,7 +167,7 @@ export default function NutritionFacts() {
             {items.map((item) => (
               <div key={item.label} className="flex justify-between text-sm md:text-base">
                 <span>{item.label}</span>
-                <span>{item.value}{item.unit}</span>
+                <span>{item.value} {item.unit}</span>
               </div>
             ))}
           </div>
@@ -145,7 +176,10 @@ export default function NutritionFacts() {
 
       {/* 적합성 판단 버튼 */}
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          fetchAIExplanation(); // ✅ 버튼 클릭 시 AI 호출
+        }}
         className="fixed bottom-0 left-0 w-full py-5 h-[63px] font-semibold md:text-lg text-white bg-[#003853]"
       >
         상품 적합성 판단하기
@@ -170,6 +204,7 @@ export default function NutritionFacts() {
                   해요!
                 </p>
               </div>
+
               <div className="mt-3 space-y-1">
                 <p className="font-medium">{allergyNote}</p>
                 {potentialAllergyNote && <p className="font-medium">{potentialAllergyNote}</p>}
@@ -178,8 +213,13 @@ export default function NutritionFacts() {
                 <p>{explanation}</p>
               </div>
 
+              {/* ✅ AI 설명 표시 영역 */}
+              <div className="mt-3 py-3 border-t border-[#CCCCCC]">
+                <p className="whitespace-pre-line">{explanation}</p>
+              </div>
+
               {/* 추천 상품 */}
-              <div className="mt-10 p-3 border-t border-[#CCCCCC]">
+              <div className="mt-3 p-3 border-t border-[#CCCCCC]">
                 <p className="font-light">이런 상품도 추천해요 😆</p>
               </div>
               <div className="p-1 grid grid-cols-3 gap-3">
