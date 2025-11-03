@@ -57,7 +57,7 @@ export default function Home() {
                     <ScaleIcon className="w-7 h-7 mb-1"/>
                     상품 비교
                 </div>
-                <div 
+                <Link to="/login"
                     className="flex-1 flex flex-col 
                     items-center justify-center 
                     text-xs font-medium text-[#A0B9C9] 
@@ -65,7 +65,7 @@ export default function Home() {
                 >
                     <UserIcon className="w-7 h-7 mb-1"/>
                     마이페이지
-                </div>
+                </Link>
             </div>
         </div>
     );
