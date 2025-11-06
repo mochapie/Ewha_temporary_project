@@ -44,15 +44,15 @@ app.add_middleware(
 # 🔹 OpenAI API Key
 # =====================================================
 client = OpenAI(
-    api_key="OPENAI_API_KEY"
+    api_key="키입력"
 )
 
 # =====================================================
 # 🔹 RDS 연결
 # =====================================================
-RDS_HOST = "RDS_HOST"
-RDS_USER = "RDS_USER"
-RDS_PW = "RDS_PASSWORD"
+RDS_HOST = "호스트"
+RDS_USER = "유저"
+RDS_PW = "비번"
 
 # =====================================================
 # 🔹 요청 데이터 구조
@@ -97,11 +97,14 @@ health_condition_rules = {
 # =====================================================
 @app.post("/analyze")
 def analyze(body: RequestBody):
+    
     user_id = body.user_id
     product_name = body.product_name
+    print("📍 받은 user_id:", user_id)
+
 
     # 1️⃣ 사용자 정보 불러오기
-    conn = mysql.connector.connect(host=RDS_HOST, user=RDS_USER, password=RDS_PW, database="user_info_db")
+    conn = mysql.connector.connect(host=RDS_HOST, user=RDS_USER, password=RDS_PW, database="product_db")
     user_df = pd.read_sql("SELECT user_id, allergies, medical_conditions FROM user_private WHERE user_id = %s", conn, params=[user_id])
     conn.close()
     if user_df.empty:
