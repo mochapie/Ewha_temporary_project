@@ -108,24 +108,28 @@ async def compare_products(request: Request):
         df_sel[nutrient_list] = df_sel[nutrient_list].apply(pd.to_numeric, errors="coerce").fillna(0.0)
 
         # 4. Z-score 계산 + 방향성 반영
+        n_criteria = len(user_standard)
         for c, direction in user_standard.items():
             mean, std = stats[c]["평균"], stats[c]["표준편차"]
             df_sel[f"z_{c}"] = (df_sel[c] - mean) / std
             df_sel[f"{c}_score"] = -df_sel[f"z_{c}"] if direction == "낮게" else df_sel[f"z_{c}"]
 
+            df_sel[f"{c}_score_100"] = ((df_sel[f"{c}_score"].clip(-10, 10) + 10) / 20) * 100
+            df_sel[f"{c}_score"] = df_sel[f"{c}_score_100"].round(1)
+    
+            df_sel[f"{c}_weighted_score"] = df_sel[f"{c}_score"] * (1 / n_criteria)
+
         # 5. 총점 계산
-        score_cols = [f"{c}_score" for c in nutrient_list]
-        df_sel["total_score"] = df_sel[score_cols].mean(axis=1)
-        df_sel["final_score_100"] = ((df_sel["total_score"].clip(-10, 10) + 10) / 20) * 100
-        df_sel["final_score_100"] = df_sel["final_score_100"].round(1)
+        weighted_cols = [f"{c}_weighted_score" for c in nutrient_list]
+        df_sel["final_score_100"] = df_sel[weighted_cols].sum(axis=1).round(1)
         df_ranked = df_sel.sort_values("final_score_100", ascending=False).reset_index(drop=True)
 
         # 6. AI 설명 생성
         comparison_table = df_ranked[
             ["품명"] + nutrient_list +
             [f"z_{c}" for c in nutrient_list] +
-            [f"{c}_score" for c in nutrient_list] +
-            ["total_score", "final_score_100"]
+            [f"{c}_weighted_score" for c in nutrient_list] +
+            ["final_score_100"]
         ].round(3)
 
         summary_payload = comparison_table.to_dict(orient="records")
