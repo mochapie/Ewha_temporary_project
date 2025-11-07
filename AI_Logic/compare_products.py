@@ -127,7 +127,6 @@ async def compare_products(request: Request):
         # 6. AI 설명 생성
         comparison_table = df_ranked[
             ["품명"] + nutrient_list +
-            [f"z_{c}" for c in nutrient_list] +
             [f"{c}_weighted_score" for c in nutrient_list] +
             ["final_score_100"]
         ].round(3)
