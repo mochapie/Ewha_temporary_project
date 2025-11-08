@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import Signup1 from './Signup1';
-import Signup2 from './Signup2';
-import Signup3 from './Signup3';
-import Signup4 from './Signup4';
-import api from '../../api/axios';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import Signup1 from './components/Signup1'
+import Signup2 from './components/Signup2'
+import Signup3 from './components/Signup3'
+import Signup4 from './components/Signup4'
+import api from '../../api/axios'
 
 export default function Signup() {
     const [step, setStep] = useState(1);
@@ -17,7 +17,7 @@ export default function Signup() {
         gender: "",
         allergies: [],
         diseases: [],
-        adjustments: [{ targetNutrient: "", action: "" }]
+        adjustments: [{ nutriFacts: "", direction: "" }]
     });
     const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export default function Signup() {
             }
             setStep(current => current + 1);
         } else {
-            // ✅ 마지막 단계 → 백엔드로 회원가입 요청
+            // 마지막 단계 → 백엔드로 회원가입 요청
             try {
                 const body = {
                     nickname: formData.displayName,
@@ -51,8 +51,8 @@ export default function Signup() {
                     allergies: formData.allergies,
                     medicalConditions: formData.diseases,
                     ingredients: formData.adjustments.map(adj => ({
-                        ingredient: adj.targetNutrient,
-                        direction: adj.action === "늘리고" ? "up" : "down"
+                        ingredient: adj.nutriFacts,
+                        direction: adj.direction === "늘리고" ? "up" : "down"
                     }))
                 };
 
@@ -75,7 +75,12 @@ export default function Signup() {
                 <h1 className="text-center text-xl font-medium">회원 정보 입력</h1>
                 <div className="absolute bottom-0 left-0 w-full px-7 flex justify-between gap-2">
                     {[1, 2, 3, 4].map((s) => (
-                        <div key={s} className={`flex-1 h-[5px] ${step > s ? "bg-[#A0B9C9]" : "bg-[#D9D9D9]"}`}></div>
+                        <div 
+                            key={s}
+                            className={`flex-1 h-[5px] 
+                                ${step > s ? "bg-[#A0B9C9]" : "bg-[#D9D9D9]"}
+                            `} 
+                        />
                     ))}
                 </div>
             </header>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import api from '../api/axios'; // ✅ axios 대신 api 임포트
-import { MagnifyingGlassIcon, HomeIcon, ScaleIcon, UserIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useState, useEffect } from 'react'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
+import api from '../api/axios' // ✅ axios 대신 api 임포트
+import { MagnifyingGlassIcon, HomeIcon, ScaleIcon, UserIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 
 export default function SearchResult() {
   const location = useLocation();
@@ -96,14 +96,18 @@ export default function SearchResult() {
           <HomeIcon className="w-7 h-7 mb-1" />
           홈
         </Link>
-        <div className="flex-1 flex flex-col items-center justify-center text-xs font-medium text-[#A0B9C9] hover:scale-105 transition">
+        <Link to="/comparison/select" 
+          className="flex-1 flex flex-col items-center justify-center text-xs font-medium text-[#A0B9C9] hover:scale-105 transition"
+        >
           <ScaleIcon className="w-7 h-7 mb-1" />
           상품 비교
-        </div>
-        <div className="flex-1 flex flex-col items-center justify-center text-xs font-medium text-[#A0B9C9] hover:scale-105 transition">
+        </Link>
+        <Link to="/login" 
+          className="flex-1 flex flex-col items-center justify-center text-xs font-medium text-[#A0B9C9] hover:scale-105 transition"
+        >
           <UserIcon className="w-7 h-7 mb-1" />
           마이페이지
-        </div>
+        </Link>
       </div>
     </div>
   );
@@ -193,5 +197,5 @@ function SortDropdown({ onChange }) {
         </div>
       )}
     </div>
-  );
+  )
 }

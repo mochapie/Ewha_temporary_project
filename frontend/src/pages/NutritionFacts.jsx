@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import api from '../api/axios';
-import { ArrowLeftIcon, HomeIcon, XCircleIcon } from '@heroicons/react/24/solid';
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams, Link } from 'react-router-dom'
+import api from '../api/axios'
+import { ArrowLeftIcon, HomeIcon, XCircleIcon } from '@heroicons/react/24/solid'
 
 export default function NutritionFacts() {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
-  const [me, setMe] = useState(null); // ✅ 로그인 사용자
+  const [me, setMe] = useState(null); // 로그인 사용자
   const [isOpen, setIsOpen] = useState(false);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [explanation, setExplanation] = useState('AI 설명을 불러오는 중...');
+  const [explanation, setExplanation] = useState("AI 설명을 불러오는 중...");
 
   // 1) 내 정보 불러오기
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function NutritionFacts() {
     }
   }, [isOpen]);
 
-  // ✅ 4) AI 설명 요청 (FastAPI로 user_id와 상품명 전달)
+  // 4) AI 설명 요청 (FastAPI로 user_id와 상품명 전달)
   const fetchAIExplanation = async () => {
     if (!product) {
       alert("상품 정보가 없습니다.");
@@ -132,7 +132,7 @@ export default function NutritionFacts() {
         : '✅ 등록된 알레르기가 없어요.';
 
     potentialAllergyNote =
-      matchedPotential.length > 0 ? `⚠️ ${matchedPotential.join(', ')} 성분이 미량 존재할 수 있어요.` : null;
+      matchedPotential.length > 0 ? `⚠️ ${matchedPotential.join(', ')} 혼입 가능성이 있어요.` : null;
   } catch (e) {
     console.error('알레르기 비교 오류:', e);
   }
