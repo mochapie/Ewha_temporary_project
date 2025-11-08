@@ -39,16 +39,15 @@ export default function Home() {
 
             {/* 하단 내비게이션 */}
             <div className="fixed bottom-0 left-0 w-full flex items-center h-[63px] bg-[#003853]">
-                <Link to="/" 
+                <div
                     className="flex-1 flex flex-col 
                     items-center justify-center 
-                    text-xs font-medium text-[#A0B9C9] 
-                    hover:scale-105 transition"
+                    text-xs font-medium text-[#A0B9C9]"
                 >
                     <HomeIcon className="w-7 h-7 mb-1"/>
                     홈
-                </Link>
-                <div 
+                </div>
+                <Link to="/comparison/select"
                     className="flex-1 flex flex-col 
                     items-center justify-center 
                     text-xs font-medium text-[#A0B9C9] 
@@ -56,7 +55,7 @@ export default function Home() {
                 >
                     <ScaleIcon className="w-7 h-7 mb-1"/>
                     상품 비교
-                </div>
+                </Link>
                 <Link to="/login"
                     className="flex-1 flex flex-col 
                     items-center justify-center 
@@ -68,5 +67,5 @@ export default function Home() {
                 </Link>
             </div>
         </div>
-    );
+    )
 }

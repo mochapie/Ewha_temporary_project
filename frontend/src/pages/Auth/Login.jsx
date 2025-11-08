@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../api/axios"; // ✅ axios 인스턴스
+import api from "../../api/axios"; // axios 인스턴스
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // ✅ 1️⃣ 로그인 요청
+      // 1️⃣ 로그인 요청
       const res = await api.post("/auth/login", {
         username: formData.id,
         password: formData.password,
@@ -27,14 +27,14 @@ export default function Login() {
       const token = res.data.accessToken;
       localStorage.setItem("accessToken", token);
 
-      // ✅ 2️⃣ 로그인 성공 후 사용자 정보 1회만 요청
+      // 2️⃣ 로그인 성공 후 사용자 정보 1회만 요청
       const meRes = await api.get("/api/users/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       console.log("📍 getMyInfo 응답:", meRes.data);
 
-      // ✅ 3️⃣ userId 안전하게 추출
+      // 3️⃣ userId 안전하게 추출
       const userData = meRes.data;
       const userId =
         typeof userData.userId !== "undefined"
